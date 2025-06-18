@@ -98,7 +98,7 @@ openupm add com.kwanjoong.textmeshpromax
   - `Window` -> `Package Manager` -> `+` button on top left -> `Add package from git URL`
 2. Copy and paste this url
   - ```https://github.com/kwan3854/TextMeshProMax.git```
-  - If you need specific version, you can specify like this ```https://github.com/kwan3854/TextMeshProMax.git#v0.2.0```
+  - If you need specific version, you can specify like this ```https://github.com/kwan3854/TextMeshProMax.git#v0.6.0```
 
 > [!TIP]
 > You can see inline comments in the code editor by enabling this option in the Unity Editor: `Edit` -> `Preferences` -> `External Tools` -> `Generate .csproj files`
@@ -214,6 +214,12 @@ Retrieve **Rect information** for Ruby strings, including body and Ruby text.
   - `Rects`: A list of `Rect` objects for the string or line.
   - `TargetString`: The concatenated plain text of the Ruby string.
 
+> [!IMPORTANT]
+> **Coordinate System**
+> The returned `Rect` values are in the **local space of the text object's transform**.
+>
+> **Breaking Change Notice**: In versions prior to `0.6.0`, the `Rect` for `TextMeshProUGUI` was returned in the Canvas's local space. This has been changed to consistently use the text object's local space for all `TMP_Text` types. Please update your implementation accordingly.
+
 ##### Code Example
 ```csharp
 using Runtime.Helper;
@@ -267,6 +273,12 @@ var rects = text.GetRubyStringRects(rubyString, TextFindMode.All);
 
 #### 2.1 TryGetRubyStringRects *(Requires RubyTextMeshPro)*
 Attempt to retrieve the **Rect information** for complex Ruby strings rendered by a `RubyTextMeshProUGUI` object. Returns `true` if successful, `false` otherwise.
+
+> [!IMPORTANT]
+> **Coordinate System**
+> The returned `Rect` values are in the **local space of the text object's transform**.
+>
+> **Breaking Change Notice**: In versions prior to `0.6.0`, the `Rect` for `TextMeshProUGUI` was returned in the Canvas's local space. This has been changed to consistently use the text object's local space for all `TMP_Text` types. Please update your implementation accordingly.
 
 #### 3. Multi-Line Support
 The library can calculate `Rect` values for text that spans multiple lines. Whether the line breaks are due to manual newlines (`\n`) or automatic text wrapping applied by TextMesh Pro, the library handles them seamlessly.
