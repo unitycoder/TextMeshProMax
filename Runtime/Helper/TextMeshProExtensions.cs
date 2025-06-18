@@ -82,8 +82,7 @@ namespace TextMeshProMax.Runtime.Helper
 
         /// <summary>
         /// Retrieves the Rect information for a specific string within a TMP_Text object.
-        /// For TextMeshPro (3D), the Rect values are in the text object's local space.
-        /// For TextMeshProUGUI (UI), the Rect values are in the canvas's local space.
+        /// The returned Rect values are in the local space of the text object's transform.
         /// </summary>
         /// <param name="text">The target TMP_Text object.</param>
         /// <param name="targetString">The string to find within the text.</param>
@@ -407,7 +406,7 @@ namespace TextMeshProMax.Runtime.Helper
                 if (charIndexes.Count == 0) continue;
 
                 // Split into lines and calculate Rect for each line
-                var lineRects = CalculateLineBoundingRects(charIndexes, textInfo, textBase.Transform);
+                var lineRects = CalculateLineBoundingRects(charIndexes, textInfo);
 
                 if (lineRects.Count > 0)
                 {
@@ -427,8 +426,7 @@ namespace TextMeshProMax.Runtime.Helper
         /// </summary>
         private static List<Rect> CalculateLineBoundingRects(
             List<int> charIndexes,
-            TMP_TextInfo textInfo,
-            Transform transform)
+            TMP_TextInfo textInfo)
         {
             var rects = new List<Rect>();
             var lineGroups = charIndexes
@@ -438,7 +436,7 @@ namespace TextMeshProMax.Runtime.Helper
             foreach (var lineGroup in lineGroups)
             {
                 var lineCharIndexes = lineGroup.ToList();
-                var rect = CalculateBoundingRect(lineCharIndexes, textInfo, transform);
+                var rect = CalculateBoundingRect(lineCharIndexes, textInfo);
                 if (rect.HasValue)
                     rects.Add(rect.Value);
             }
@@ -451,21 +449,20 @@ namespace TextMeshProMax.Runtime.Helper
         /// </summary>
         private static Rect? CalculateBoundingRect(
             List<int> charIndexes,
-            TMP_TextInfo textInfo,
-            Transform transform)
+            TMP_TextInfo textInfo)
         {
             if (charIndexes == null || charIndexes.Count == 0)
                 return null;
 
             var firstCharInfo = textInfo.characterInfo[charIndexes[0]];
-            var bottomLeft = transform.TransformPoint(firstCharInfo.bottomLeft);
-            var topRight = transform.TransformPoint(firstCharInfo.topRight);
+            var bottomLeft = (Vector2)firstCharInfo.bottomLeft;
+            var topRight = (Vector2)firstCharInfo.topRight;
 
             foreach (var index in charIndexes.Skip(1))
             {
                 var charInfo = textInfo.characterInfo[index];
-                var charBottomLeft = transform.TransformPoint(charInfo.bottomLeft);
-                var charTopRight = transform.TransformPoint(charInfo.topRight);
+                var charBottomLeft = (Vector2)charInfo.bottomLeft;
+                var charTopRight = (Vector2)charInfo.topRight;
 
                 bottomLeft = Vector2.Min(bottomLeft, charBottomLeft);
                 topRight = Vector2.Max(topRight, charTopRight);
