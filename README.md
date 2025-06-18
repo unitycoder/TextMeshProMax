@@ -123,6 +123,12 @@ Retrieve the **Rect information** for specific strings rendered by a `TMP_Text` 
 - **Returns**:
   - A list of `TextRectInfo` containing `Rects` and the `TargetString`.
 
+> [!IMPORTANT]
+> **Coordinate System**
+> The returned `Rect` values are in the **local space of the text object's transform**.
+>
+> **Breaking Change Notice**: In versions prior to `0.6.0`, the `Rect` for `TextMeshProUGUI` was returned in the Canvas's local space. This has been changed to consistently use the text object's local space for all `TMP_Text` types. Please update your implementation accordingly.
+
 ##### Code Example
 ```csharp
 using Runtime.Helper;
@@ -171,6 +177,13 @@ Attempt to retrieve the **Rect information** for specific strings rendered by a 
   - Adds `out results` (`List<TextRectInfo>`).
 - **Returns**:
   - `bool`: `true` if successful.
+
+> [!IMPORTANT]
+> **Coordinate System**
+> The returned `Rect` values are in the **local space of the text object's transform**.
+>
+> **Breaking Change Notice**: In versions prior to `0.6.0`, the `Rect` for `TextMeshProUGUI` was returned in the Canvas's local space. This has been changed to consistently use the text object's local space for all `TMP_Text` types. Please update your implementation accordingly.
+
 
 ##### Code Example
 ```csharp
